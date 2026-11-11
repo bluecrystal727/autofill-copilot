@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Autofill Copilot – Settings &amp; Profile</title>
+    <link rel="stylesheet" href="options.css" />
+  </head>
+  <body>
+    <header class="top">
+      <img src="../icons/icon48.png" alt="" width="32" height="32" />
+      <div>
+        <h1>Autofill Copilot</h1>
+        <p class="muted">Your data and API key are stored only in this browser profile.</p>
+        <p class="developer-credit">Developed by Blue Crystal</p>
+      </div>
+    </header>
+
+    <nav>
+      <a href="#ai">1. AI provider</a>
+      <a href="#resume">2. Resume</a>
+      <a href="#profile">3. Profile</a>
+      <a href="#answers">4. Application answers</a>
+      <a href="#prefs">5. Preferences</a>
+      <a href="#tailoring">6. Tailoring prompt</a>
+      <a href="#job-history">7. Job history</a>
+    </nav>
+
+    <main>
+      <!-- 1. AI provider -->
+      <section id="ai" class="card">
+        <h2>1. AI provider</h2>
+        <div class="grid">
+          <label>Provider
+            <select id="provider"></select>
+          </label>
+          <label>Model <span class="muted small">(blank = default)</span>
+            <input id="model" type="text" spellcheck="false" />
+          </label>
+        </div>
+        <label>API key
+          <div class="row">
+            <input id="api-key" type="password" autocomplete="off" spellcheck="false" />
+            <button id="toggle-key" class="secondary" type="button">Show</button>
+          </div>
+        </label>
+        <p class="small muted">Get a key: <a id="key-link" target="_blank" rel="noopener"></a>. Each autofill costs a fraction of a cent to a few cents depending on the model.</p>
+        <label>ApplyIQ scorer API key <span class="muted small">(optional)</span>
+          <input id="scorer-api-key" type="password" autocomplete="off" spellcheck="false" placeholder="Anonymous scoring includes a limited free allowance" />
+        </label>
+        <p class="small muted">Original and tailored resume text plus the job description are sent to <a href="https://resume-scorer.fly.dev" target="_blank" rel="noopener">ApplyIQ Resume Scorer</a> to calculate ATS and HR scores. Each comparison scores two resumes and uses the scorer's quota. The API key is stored locally in this browser profile.</p>
+        <div class="row">
+          <button id="save-ai" class="primary">Save</button>
+          <button id="test-ai" class="secondary">Test connection</button>
+          <span id="ai-status" class="status"></span>
+        </div>
+        <div class="usage-card">
+          <div class="row">
+            <h3 class="grow">Tracked token usage</h3>
+            <button id="clear-ai-usage" class="secondary" type="button">Reset usage</button>
+          </div>
+          <p class="small muted">Usage recorded by this extension across Autofill, resume parsing, tailoring, and connection tests. Bars compare input (purple) and output (green) tokens; they are not quota or billing limits. Check your provider dashboard for account-wide usage and limits.</p>
+          <div id="ai-usage-list" aria-live="polite"></div>
+          <span id="usage-status" class="status"></span>
+        </div>
+      </section>
+
+      <!-- 2. Resume -->
+      <section id="resume" class="card">
+        <h2>2. Resume</h2>
+        <p class="muted">Upload a PDF or Word (.docx) resume, or paste the text. The AI turns it into the profile below, which you can edit.</p>
+        <div id="drop" class="drop" tabindex="0">
+          <strong>Drop your resume here</strong> or click to choose a file
+          <span class="small muted">PDF, DOCX, TXT · max 5 MB</span>
+          <input id="file" type="file" accept=".pdf,.docx,.txt,.md,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain" hidden />
+        </div>
+        <p id="file-info" class="small"></p>
+        <details id="paste-box">
+          <summary>Paste resume text instead / view extracted text</summary>
+          <textarea id="resume-text" rows="12" spellcheck="false" placeholder="Paste your resume text here…"></textarea>
+        </details>
+        <div class="row">
+          <button id="parse" class="primary">Parse with AI</button>
+          <span id="resume-status" class="status"></span>
+        </div>
+      </section>
+
+      <!-- 3. Profile -->
+      <section id="profile" class="card">
+        <div class="row">
+          <h2 class="grow">3. Profile</h2>
+          <button id="save-profile" class="primary">Save profile</button>
+        </div>
+        <span id="profile-status" class="status"></span>
+        <div id="profile-form"></div>
+      </section>
+
+      <!-- 4. Application answers -->
+      <section id="answers" class="card">
+        <div class="row">
+          <h2 class="grow">4. Application answers</h2>
+          <button id="save-answers" class="primary">Save answers</button>
+        </div>
+        <p class="muted">Answers to questions a resume doesn't cover. Leave blank to have the AI skip those questions.</p>
+        <span id="answers-status" class="status"></span>
+        <div id="answers-form"></div>
+        <h3>Custom questions &amp; answers</h3>
+        <p class="small muted">Reusable answers for recurring questions, e.g. "Why are you looking for a new role?"</p>
+        <div id="qa-list"></div>
+        <button id="add-qa" class="secondary" type="button">+ Add question</button>
+        <label>Additional instructions for the AI
+          <textarea id="additional-instructions" rows="3" placeholder="e.g. Keep answers under 120 words. Always use my personal email."></textarea>
+        </label>
+      </section>
+
+      <!-- 5. Preferences -->
+      <section id="prefs" class="card">
+        <h2>5. Preferences</h2>
+        <label class="check"><input type="checkbox" id="reviewLongAnswers" /> Review long, AI-written answers before inserting them</label>
+        <label class="check"><input type="checkbox" id="attachResume" /> Attach my resume file to resume/CV upload fields</label>
+        <label class="check"><input type="checkbox" id="useCache" /> Remember answers per site to save tokens and speed up repeat forms</label>
+        <label class="check"><input type="checkbox" id="overwriteExisting" /> Overwrite fields that already have a value</label>
+        <label class="check"><input type="checkbox" id="fillSensitive" /> Allow filling sensitive fields (SSN, date of birth, bank, passport) <span class="warn-text">not recommended</span></label>
+        <div class="row">
+          <button id="save-prefs" class="primary">Save preferences</button>
+          <span id="prefs-status" class="status"></span>
+        </div>
+        <hr />
+        <div class="row">
+          <button id="export" class="secondary" type="button">Export profile (JSON)</button>
+          <button id="import" class="secondary" type="button">Import profile</button>
+          <input id="import-file" type="file" accept=".json,application/json" hidden />
+          <button id="clear-cache" class="secondary" type="button">Clear remembered answers</button>
+          <button id="clear-all" class="danger" type="button">Delete all data</button>
+        </div>
+        <span id="data-status" class="status"></span>
+      </section>
+
+      <section id="tailoring" class="card">
+        <h2>6. Resume tailoring prompt</h2>
+        <p class="muted">Customize the instructions used when tailoring your resume. Keep both placeholders so your resume and the job description are included.</p>
+        <label>Prompt
+          <textarea id="tailoring-prompt" rows="20" spellcheck="false"></textarea>
+        </label>
+        <p class="small muted">Required placeholders: <code>{resume_text}</code> and <code>{job_description}</code>.</p>
+        <div class="row">
+          <button id="save-tailoring" class="primary" type="button">Save tailoring prompt</button>
+          <button id="reset-tailoring" class="secondary" type="button">Restore default prompt</button>
+          <span id="tailoring-status" class="status"></span>
+        </div>
+      </section>
+
+      <section id="job-history" class="card">
+        <div class="row">
+          <h2 class="grow">7. Job application history</h2>
+          <button id="export-history-xlsx" class="secondary" type="button">Export XLSX</button>
+          <button id="clear-history" class="danger" type="button">Clear history</button>
+        </div>
+        <p class="muted">Entries are stored locally. Update a job to Applied after you submit it so the duplicate check can warn you before tailoring it again.</p>
+        <span id="history-status" class="status"></span>
+        <div id="history-list"></div>
+      </section>
+    </main>
+
+    <script type="module" src="options.js"></script>
+  </body>
+</html>

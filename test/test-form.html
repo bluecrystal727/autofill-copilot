@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Test Job Application – Autofill Copilot</title>
+    <style>
+      body { max-width: 760px; margin: 30px auto; padding: 0 16px; font: 14px/1.5 system-ui, sans-serif; color: #111827; }
+      .job { padding: 12px 16px; border: 1px solid #e5e7eb; border-radius: 8px; background: #f9fafb; }
+      fieldset { margin: 18px 0; padding: 12px 16px; border: 1px solid #e5e7eb; border-radius: 8px; }
+      legend { font-weight: 600; }
+      label { display: block; margin: 8px 0 2px; font-weight: 500; }
+      input[type=text], input[type=email], input[type=tel], input[type=url], input[type=date],
+      input[type=month], input[type=number], select, textarea {
+        width: 100%; padding: 6px 8px; border: 1px solid #d1d5db; border-radius: 6px; font: inherit; box-sizing: border-box;
+      }
+      .inline label { display: inline; font-weight: 400; margin-right: 12px; }
+      .q { margin: 10px 0 2px; font-weight: 500; }
+      .rich { min-height: 70px; padding: 6px 8px; border: 1px solid #d1d5db; border-radius: 6px; }
+      .combo { position: relative; }
+      .combo [role=listbox] { position: absolute; z-index: 2; left: 0; right: 0; margin: 2px 0 0; padding: 4px 0; list-style: none; background: #fff; border: 1px solid #d1d5db; border-radius: 6px; }
+      .combo [role=option] { padding: 4px 10px; cursor: pointer; }
+      .combo [role=option]:hover { background: #eef2ff; }
+      #react-out { color: #16a34a; font-size: 12px; }
+      button[type=submit] { margin-top: 16px; padding: 8px 18px; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Senior Software Engineer – Acme Robotics</h1>
+      <div class="job">
+        <p><strong>About the role.</strong> Acme Robotics builds autonomous warehouse robots. You will design and ship
+          backend services in TypeScript and Go, run them on Kubernetes in AWS, and mentor engineers.
+          Remote-friendly (US/EU time zones).</p>
+      </div>
+
+      <form id="app" action="#" onsubmit="event.preventDefault(); alert('Submitted (test only)');">
+        <fieldset>
+          <legend>Personal information</legend>
+          <label for="first">First name *</label>
+          <input id="first" name="first_name" type="text" autocomplete="given-name" required />
+          <label for="last">Last name *</label>
+          <input id="last" name="last_name" type="text" autocomplete="family-name" required />
+          <div class="field-wrapper">
+            <div class="text-input-wrapper">
+              <div class="input-wrapper">
+                <label id="email-label" for="email" class="label label">Email<span aria-hidden="true">*</span></label>
+                <input id="email" name="email" class="input input__single-line" aria-label="Email" aria-describedby="email-description email-error email-help" aria-invalid="false" aria-errormessage="email-error" aria-required="true" type="text" maxlength="255" autocomplete="email" value="" />
+              </div>
+            </div>
+          </div>
+          <span id="email-description" class="small">Enter your email address.</span>
+          <span id="email-error" hidden></span>
+          <span id="email-help" hidden></span>
+          <label for="phone">Phone</label>
+          <input id="phone" name="phone" type="tel" />
+          <label for="city">City</label>
+          <input id="city" name="city" type="text" />
+          <label for="country">Country</label>
+          <select id="country" name="country">
+            <option value="">Select…</option>
+            <option>United States</option>
+            <option>Canada</option>
+            <option>United Kingdom</option>
+            <option>Germany</option>
+            <option>India</option>
+            <option>Other</option>
+          </select>
+          <label for="linkedin">LinkedIn profile</label>
+          <input id="linkedin" name="urls[LinkedIn]" type="url" />
+          <!-- label comes only from aria-label -->
+          <input name="urls[GitHub]" type="url" aria-label="GitHub URL" placeholder="https://github.com/…" style="margin-top:8px" />
+        </fieldset>
+
+        <fieldset>
+          <legend>Resume</legend>
+          <label for="resume">Resume/CV *</label>
+          <input id="resume" name="resume" type="file" accept=".pdf,.doc,.docx,.txt" />
+        </fieldset>
+
+        <fieldset>
+          <legend>Current position</legend>
+          <label for="company">Current company</label>
+          <input id="company" name="org" type="text" />
+          <label for="title">Current title</label>
+          <input id="title" name="title" type="text" />
+          <label for="years">Years of professional experience</label>
+          <input id="years" name="years" type="number" min="0" />
+          <label for="start">Earliest start date</label>
+          <input id="start" name="start_date" type="date" />
+        </fieldset>
+
+        <fieldset>
+          <legend>Education</legend>
+          <label for="school">School</label>
+          <input id="school" name="school" type="text" />
+          <label for="degree">Degree</label>
+          <select id="degree" name="degree">
+            <option value="">Select…</option>
+            <option value="hs">High School</option>
+            <option value="ba">Bachelor's Degree</option>
+            <option value="ma">Master's Degree</option>
+            <option value="phd">Doctorate</option>
+          </select>
+          <label for="grad">Graduation month</label>
+          <input id="grad" name="grad" type="month" />
+        </fieldset>
+
+        <fieldset>
+          <legend>Questions</legend>
+          <p class="q">Are you legally authorized to work in the United States?</p>
+          <div class="inline">
+            <input type="radio" id="auth-y" name="authorized" value="1" /><label for="auth-y">Yes</label>
+            <input type="radio" id="auth-n" name="authorized" value="0" /><label for="auth-n">No</label>
+          </div>
+          <p class="q">Will you now or in the future require sponsorship for employment visa status?</p>
+          <div class="inline">
+            <input type="radio" id="sp-y" name="sponsorship" value="1" /><label for="sp-y">Yes</label>
+            <input type="radio" id="sp-n" name="sponsorship" value="0" /><label for="sp-n">No</label>
+          </div>
+          <label for="work-pref">Preferred work arrangement</label>
+          <select id="work-pref" name="work_pref">
+            <option value="">--</option>
+            <option>Remote</option>
+            <option>Hybrid</option>
+            <option>On-site</option>
+          </select>
+
+          <p class="q">Which of these technologies have you used professionally?</p>
+          <div class="inline">
+            <input type="checkbox" id="t-ts" name="tech" value="ts" /><label for="t-ts">TypeScript</label>
+            <input type="checkbox" id="t-go" name="tech" value="go" /><label for="t-go">Go</label>
+            <input type="checkbox" id="t-k8s" name="tech" value="k8s" /><label for="t-k8s">Kubernetes</label>
+            <input type="checkbox" id="t-rust" name="tech" value="rust" /><label for="t-rust">Rust</label>
+          </div>
+
+          <!-- custom ARIA dropdown (like many ATS widgets) -->
+          <label id="hear-label">How did you hear about us?</label>
+          <div class="combo">
+            <button type="button" id="hear" aria-haspopup="listbox" aria-labelledby="hear-label" aria-controls="hear-list" aria-expanded="false">Select…</button>
+            <ul id="hear-list" role="listbox" hidden>
+              <li role="option">LinkedIn</li>
+              <li role="option">Company website</li>
+              <li role="option">Referral</li>
+              <li role="option">Job board</li>
+            </ul>
+          </div>
+
+          <label for="why">Why do you want to work at Acme Robotics?</label>
+          <textarea id="why" name="why" rows="5" maxlength="1500"></textarea>
+
+          <p class="q">Anything else you'd like us to know?</p>
+          <div class="rich" contenteditable="true" aria-label="Additional information"></div>
+        </fieldset>
+
+        <fieldset>
+          <legend>React-style controlled input</legend>
+          <label for="react-input">Preferred name</label>
+          <input id="react-input" name="preferred_name" type="text" />
+          <div id="react-out">Framework state: (empty)</div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Should be skipped</legend>
+          <label for="ssn">Social Security Number</label>
+          <input id="ssn" name="ssn" type="text" />
+          <label for="pw">Create password</label>
+          <input id="pw" name="password" type="password" />
+          <label class="inline"><input type="checkbox" name="terms" /> I certify that the information provided is accurate and agree to the terms.</label>
+        </fieldset>
+
+        <button type="submit">Submit application</button>
+      </form>
+    </main>
+
+    <script>
+      // Custom dropdown behaviour
+      const btn = document.getElementById('hear');
+      const list = document.getElementById('hear-list');
+      btn.addEventListener('click', () => {
+        list.hidden = !list.hidden;
+        btn.setAttribute('aria-expanded', String(!list.hidden));
+      });
+      list.addEventListener('click', (e) => {
+        const opt = e.target.closest('[role=option]');
+        if (!opt) return;
+        btn.textContent = opt.textContent;
+        list.hidden = true;
+        btn.setAttribute('aria-expanded', 'false');
+      });
+
+      // Simulates a React controlled input: framework state only updates from 'input' events.
+      const ri = document.getElementById('react-input');
+      ri.addEventListener('input', () => (document.getElementById('react-out').textContent = 'Framework state: ' + ri.value));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,17 @@
+/* Injected by Autofill Copilot to show which fields were filled. */
+.afc-filled {
+  outline: 2px solid #22c55e !important;
+  outline-offset: 1px !important;
+  background-color: rgba(34, 197, 94, 0.08) !important;
+  transition: outline-color 0.2s ease;
+}
+
+.afc-skipped {
+  outline: 2px dashed #f59e0b !important;
+  outline-offset: 1px !important;
+}
+
+.afc-review {
+  outline: 2px solid #6366f1 !important;
+  outline-offset: 1px !important;
+}

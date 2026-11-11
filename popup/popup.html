@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Autofill Copilot</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <header>
+      <img src="../icons/icon32.png" alt="" width="20" height="20" />
+      <h1>Autofill Copilot</h1>
+      <button id="open-options" class="icon-btn" title="Settings &amp; profile">⚙</button>
+      <button id="close-panel" class="icon-btn close-btn" title="Close side panel" aria-label="Close side panel">×</button>
+    </header>
+
+    <section id="setup" class="card warn" hidden>
+      <p id="setup-msg"></p>
+      <button id="setup-btn" class="secondary">Open settings</button>
+    </section>
+
+    <section id="main">
+      <p id="profile-line" class="muted"></p>
+      <button id="autofill-btn" class="primary">Autofill this page</button>
+    </section>
+
+    <section id="tailor" class="card">
+      <h2>Tailor your resume</h2>
+      <p class="muted small">Read this job page, then generate a professionally styled PDF. It downloads with a company/job/date name and uses your name for application uploads. The extension never submits the application.</p>
+      <p class="muted small">Requires a saved default resume and an AI API key; configure them in Options.</p>
+      <button id="read-job-btn" class="secondary wide">Read job information</button>
+      <div id="job-form" hidden>
+        <label>Job title<input id="job-title" type="text" /></label>
+        <label>Company<input id="job-company" type="text" /></label>
+        <label>Job URL<input id="job-url" type="url" /></label>
+        <label>Job description<textarea id="job-description" rows="8"></textarea></label>
+        <button id="tailor-btn" class="primary">Tailor and attach PDF</button>
+      </div>
+      <div id="duplicate-confirm" class="card warn" hidden>
+        <p id="duplicate-msg" class="small"></p>
+        <button id="continue-tailor" class="secondary wide">Continue anyway</button>
+      </div>
+      <p id="tailor-status" class="small muted" aria-live="polite"></p>
+      <div id="tailor-result" hidden>
+        <p id="tailor-result-msg" class="small"></p>
+        <div id="score-results" class="score-card" hidden>
+          <h3>ATS &amp; HR scores</h3>
+          <p id="score-status" class="small muted"></p>
+          <div class="score-grid">
+            <span></span><strong>ATS</strong><strong>HR</strong>
+            <strong>Original</strong><span id="original-ats-score">—</span><span id="original-hr-score">—</span>
+            <strong>Tailored</strong><span id="tailored-ats-score">—</span><span id="tailored-hr-score">—</span>
+            <strong>Change</strong><span id="ats-score-delta">—</span><span id="hr-score-delta">—</span>
+          </div>
+        </div>
+        <details>
+          <summary>Review tailored resume text</summary>
+          <textarea id="tailored-preview" rows="10" readonly></textarea>
+        </details>
+        <button id="upload-tailored" class="secondary wide">Upload tailored resume</button>
+      </div>
+    </section>
+
+    <section id="status" class="card" hidden>
+      <div id="spinner" class="spinner" hidden></div>
+      <p id="status-msg"></p>
+      <ul id="status-details" class="small"></ul>
+      <button id="clear-btn" class="link" hidden>Clear highlights</button>
+    </section>
+
+    <section id="review" hidden>
+      <h2>Review drafted answers <span id="review-count" class="pill"></span></h2>
+      <p class="muted small">Edit if needed, then insert. Nothing is inserted without your approval.</p>
+      <div id="review-list"></div>
+      <div class="row">
+        <button id="insert-all" class="primary">Insert all</button>
+      </div>
+    </section>
+
+    <template id="review-item">
+      <div class="review-item">
+        <label class="q"></label>
+        <textarea rows="6"></textarea>
+        <div class="row">
+          <span class="count muted small"></span>
+          <span class="spacer"></span>
+          <button class="copy link">Copy</button>
+          <button class="dismiss link">Dismiss</button>
+          <button class="insert secondary">Insert</button>
+        </div>
+      </div>
+    </template>
+
+    <footer class="developer-credit">Developed by Blue Crystal</footer>
+
+    <script type="module" src="popup.js"></script>
+  </body>
+</html>

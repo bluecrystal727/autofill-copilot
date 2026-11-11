@@ -1,0 +1,9 @@
+node_modules/
+*.log
+.DS_Store
+Thumbs.db
+*.zip
+*.crx
+*.pem
+# Never commit personal data exported from the extension
+autofill-copilot-profile*.json
